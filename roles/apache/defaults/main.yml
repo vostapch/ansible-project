@@ -1,0 +1,16 @@
+---
+default_soft_pkg_redhat:
+  - mc
+  - vim
+  - nano
+  - firewalld
+  - httpd
+  - wget
+default_soft_pkg_debian:
+  - mc
+  - vim
+  - anacron
+  - apache2
+  - wget
+  - curl
+  

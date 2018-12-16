@@ -1,0 +1,4 @@
+---
+  - name: centos
+    debug:
+      var: ansible_os_family
