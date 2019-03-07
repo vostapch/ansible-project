@@ -51,3 +51,6 @@
     group: apache
     mode: 0775
   notify: restart httpd
+
+- name: 11.Copy file
+  shell: echo "<?php phpinfo (); ?>" > /var/www/html/example.com/info.php

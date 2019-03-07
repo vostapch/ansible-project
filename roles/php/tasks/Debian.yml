@@ -1,42 +1,48 @@
 ---
-
-- name: 1.Upgrade all packages to the latest version
+- name: Install requires package for apt module
+  become: true
   apt:
-    name: "*"
-    state: latest
+    name: python-apt
 
-- name: 2.Install php extensions
-  apt: name={{ ['php7.2-gd', 'php7.2-ssh2'] }} state=present
-  become: yes
+- name: Remove old PHP7 ppa repository
+  apt_repository: repo='ppa:ondrej/php-7.2' state=absent
 
+- name: Add PHP7 ppa repository
+  apt_repository: repo='ppa:ondrej/php'
 
-# - name: Add repository for PHP versions (Ubuntu).
-#   apt_repository: 
-#   repo: 'ppa:ondrej/php'
-#   when: ansible_distribution == "Ubuntu"
+- name: Update apt cache
+  become: true
+  apt: update_cache=true
 
-# - name: Add dependencies for PHP versions (Debian).
-#   apt:
-#     name:
-#       - apt-transport-https
-#       - ca-certificates
-#     state: present
-#   when: ansible_distribution == "Ubuntu"
+- name: Install php packages
+  become: true
+  apt:
+    name: "{{ item }}"
+  with_nested: "{{ apt_php_packages }}"
+  when: apt_php_packages is defined
+  notify:
+    - restart php7-fpm
 
-
-# - name: Purge PHP version packages.
-#   apt:
-#     name: "{{ item }}"
-#     state: absent
-#     purge: true
-#     force: true
+- name: Start php7-fpm
+  become: true
+  service:
+    name: "php{{ apt_php_version }}-fpm"
+    state: started
+    enabled: yes
+# - name: Install packages
+#   apt: pkg={{ item }} state=latest update_cache=yes
 #   with_items:
-#     - php7.2-common
+#    - php7.1-cli
+#    - php7.1-fpm
+#    - php7.1-dev
+#    - php7.1-curl
+#   tags:
+#    - php
 
 
-# - name: Check if PHP is installed.
-#   command: which php
-#   changed_when: false
-#   failed_when: false
-#   register: php_installed
-#   when: ansible_distribution == "Ubuntu"
+- name: Check if PHP is installed.
+  command: which php
+  changed_when: false
+  failed_when: false
+  register: php_installed
+  when: ansible_distribution == "Ubuntu"

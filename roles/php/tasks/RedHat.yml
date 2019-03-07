@@ -1,30 +1,67 @@
 ---
-- name: 1.Adding epel-release repository to Centos 7
-  yum_repository:
-    name: epel
-    description: EPEL YUM repo
-    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
-      
+#- name: 1.Add repository
+#  yum:
+#    name: epel
+#    description: EPEL YUM repo
+#    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/      
 
-- name: 2.Installing Remi repository for PHP 7.2
+#- name: 2.Installing Remi repository for PHP 7.2
+#  yum:
+#    name: http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+#    state: present
+
+#- name: Install requires package with yum
+#  become: true
+#  yum:
+#    name:
+#    - libselinux-python
+#    - epel-release
+
+- name: 1.Install EPEL repo.
   yum:
-    name: http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+      state: present
+
+- name: 2.Import EPEL GPG key.
+  rpm_key:
+      key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+      state: present
+
+- name: 3.Install remi repo.
+  yum:
+      name: http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
+      state: present
+
+- name: 4.Import remi GPG key.
+  rpm_key:
+    key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
     state: present
 
-- name: 3.Upgrade all packages
+
+
+- name: 5.Install the remi and ius repo from remote repo
+  become: true
+  yum:
+    name:
+    - "http://rpms.remirepo.net/enterprise/remi-release-7.rpm"
+    - "https://centos7.iuscommunity.org/ius-release.rpm"
+
+- name: 6.Upgrade all packages
   become: true
   yum:
     name: "*"
     state: latest
 
-- name: 4.Install php
+- name: Install PHP 7 Packages
+  become: true
   yum:
-    name: php72
-    state: latest
+    name: "{{ yum_php_packages }}"
+    enablerepo: remi
+  when: yum_php_packages is defined
+#   notify: restart php7-fpm on centos
 
-    # enablerepo: remi
 
-# - name: 4.Start php7-fpm on centos
+# - name: Start php7-fpm if not started
 #   become: true
 #   service:
 #     name: php-fpm

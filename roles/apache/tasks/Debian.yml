@@ -83,3 +83,6 @@
     group: www-data
     mode: 0775
    notify: restart apache2
+
+ - name: copy file
+   shell: echo "<?php phpinfo (); ?>" > /var/www/html/example2.com/info.php

@@ -1,12 +1,23 @@
 ---
-# defaults file for php
+yum_php_packages:
+  - php{{ yum_php_version }}-cli
+  - php{{ yum_php_version }}-common
+  - php{{ yum_php_version }}-fpm
+  # - php{{ yum_php_version }}-fpm-nginx
+  # - php{{ yum_php_version }}-json
+  # - php{{ yum_php_version }}-mysqlnd
+  # - php{{ yum_php_version }}-opcache
+  # - php{{ yum_php_version }}-pdo
 
-# - name: restart httpd 
-#   service: 
-#     name: httpd
-#     state: restarted
+yum_php_version: '71-php'
 
-# - name: restart apache2 
-#   service: 
-#     name: apache2
-#     state: restarted
+apt_php_packages:
+  - php{{ apt_php_version }}
+  - php{{ apt_php_version }}-cgi
+  - php{{ apt_php_version }}-cli
+  - php{{ apt_php_version }}-common
+  - php{{ apt_php_version }}-curl
+  - php{{ apt_php_version }}-fpm
+  - php{{ apt_php_version }}-gd
+
+apt_php_version: "7.1"

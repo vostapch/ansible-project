@@ -36,14 +36,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.name = "ubuntu16"
     end
   end
-  config.vm.define "ubuntu18.04" do |config|
-    config.vm.box = "ubuntu/bionic64"
-    config.vm.hostname = "bionic"
-    config.vm.network "private_network", ip: "172.28.128.51"
-    config.vm.provider :virtualbox do |vb|
-        vb.name = "ubuntu18.04"
-    end
-  end
+# config.vm.define "ubuntu18.04" do |config|
+# config.vm.box = "ubuntu/bionic64"
+# config.vm.hostname = "bionic"
+# config.vm.network "private_network", ip: "172.28.128.51"
+# config.vm.provider :virtualbox do |vb|
+#     vb.name = "ubuntu18.04"
+#  end
+# end
 
   config.vm.define "centos7" do |config|
     config.vm.box = "centos/7"
