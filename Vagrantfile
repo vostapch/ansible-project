@@ -9,7 +9,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.memory = 256
     v.cpus = 1
   end
-
   # If true, then any SSH connections made will enable agent forwarding.
   config.ssh.forward_agent = true
 
@@ -26,24 +25,32 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "#{ ssh_key_path + 'id_rsa.pub' }", destination: "/home/vagrant/.ssh/authorized_keys"
   config.vm.provision "shell", inline: "chown vagrant:vagrant /home/vagrant/.ssh/authorized_keys"
   config.vm.provision "shell", inline: "chmod 600 /home/vagrant/.ssh/authorized_keys"
-
- config.vm.define "ubuntu18.04" do |config|
-    config.vm.box = "ubuntu/bionic64"
-    config.vm.hostname = "bionic"
-    config.vm.network "private_network", ip: "172.28.128.40"
+  
+  config.vm.provision "shell", path: "provision/provision.sh"
+  
+  config.vm.define "ubuntu16" do |config|
+    config.vm.box = "ubuntu/xenial64"
+    config.vm.hostname = "ubuntu16.vm.example.com"
+    config.vm.network "private_network", ip: "172.28.128.41"
     config.vm.provider :virtualbox do |vb|
-        vb.name = "ubuntu18.04"
+        vb.name = "ubuntu16"
     end
-    config.vm.provision "shell", inline: <<-SHELL
-      apt install -y python
-    SHELL
   end
-config.vm.define "centos7" do |config|
+# config.vm.define "ubuntu18.04" do |config|
+# config.vm.box = "ubuntu/bionic64"
+# config.vm.hostname = "bionic"
+# config.vm.network "private_network", ip: "172.28.128.51"
+# config.vm.provider :virtualbox do |vb|
+#     vb.name = "ubuntu18.04"
+#  end
+# end
+
+  config.vm.define "centos7" do |config|
     config.vm.box = "centos/7"
     config.vm.hostname = "centos7"
     config.vm.network "private_network", ip: "172.28.128.50"
     config.vm.provider :virtualbox do |vb|
         vb.name = "centos7"
     end
-end
-end
+  end
+ end

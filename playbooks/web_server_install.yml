@@ -1,17 +1,8 @@
 ---
 - hosts: all
   become: yes
-  tasks:
-    - name: Surprise
-      shell: echo 'hello surprise'
-      register: value1
-
-    - name: output variable
-      debug:
-        #  var: value1
-       msg: "{{ value1.stdout }} hot google"
-
-- hosts: centos
-  become: yes
   roles:
+    - { role: "php" }
+#   - { role: "mysql" }
     - { role: "apache" }
+

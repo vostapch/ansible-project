@@ -1,0 +1,5 @@
+---
+- name: include OS
+  include: "{{ ansible_os_family }}.yml"
+
+#  when: ansible_os_family == "RedHat"

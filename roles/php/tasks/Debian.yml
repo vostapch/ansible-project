@@ -1,0 +1,48 @@
+---
+- name: Install requires package for apt module
+  become: true
+  apt:
+    name: python-apt
+
+- name: Remove old PHP7 ppa repository
+  apt_repository: repo='ppa:ondrej/php-7.2' state=absent
+
+- name: Add PHP7 ppa repository
+  apt_repository: repo='ppa:ondrej/php'
+
+- name: Update apt cache
+  become: true
+  apt: update_cache=true
+
+- name: Install php packages
+  become: true
+  apt:
+    name: "{{ item }}"
+  with_nested: "{{ apt_php_packages }}"
+  when: apt_php_packages is defined
+  notify:
+    - restart php7-fpm
+
+- name: Start php7-fpm
+  become: true
+  service:
+    name: "php{{ apt_php_version }}-fpm"
+    state: started
+    enabled: yes
+# - name: Install packages
+#   apt: pkg={{ item }} state=latest update_cache=yes
+#   with_items:
+#    - php7.1-cli
+#    - php7.1-fpm
+#    - php7.1-dev
+#    - php7.1-curl
+#   tags:
+#    - php
+
+
+- name: Check if PHP is installed.
+  command: which php
+  changed_when: false
+  failed_when: false
+  register: php_installed
+  when: ansible_distribution == "Ubuntu"

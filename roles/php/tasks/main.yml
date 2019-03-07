@@ -1,0 +1,4 @@
+---
+# tasks file for php
+- name: include OS
+  include: "{{ ansible_os_family }}.yml"

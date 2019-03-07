@@ -1,0 +1,21 @@
+---
+# tasks file for mysql
+- name: add repo
+  yum_repository:
+    name: epel-release
+    state: present
+
+- name:  add mariadb_repo
+  yum_repository:
+    name: mariadb
+    file: mariadb
+    baseurl: http://yum.mariadb.org/{{mariadb_versions}}/centos7-amd64
+    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+    gpgcheck: yes
+    
+
+- name: Test family OS
+  assert:
+    that:
+      - ansible_os_family == "RedHat" or ansible_os_family == "Debian"
+    success_msg: "All Os are supported" 
