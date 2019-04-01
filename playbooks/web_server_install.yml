@@ -1,8 +1,9 @@
 ---
-- hosts: all
+- hosts: centos
   become: yes
   roles:
+    - { role: "apache" }  
     - { role: "php" }
 #   - { role: "mysql" }
-    - { role: "apache" }
+
 
