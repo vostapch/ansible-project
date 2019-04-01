@@ -1,15 +1,26 @@
 ---
-yum_php_packages:
-  - php{{ yum_php_version }}-cli
-  - php{{ yum_php_version }}-common
-  - php{{ yum_php_version }}-fpm
-  # - php{{ yum_php_version }}-fpm-nginx
-  # - php{{ yum_php_version }}-json
-  # - php{{ yum_php_version }}-mysqlnd
-  # - php{{ yum_php_version }}-opcache
-  # - php{{ yum_php_version }}-pdo
 
-yum_php_version: '71-php'
+remi_repo_url: "http://rpms.remirepo.net/enterprise/remi-release-7.rpm"
+
+yum_php_packages:
+  - php-common
+  - php-cli
+  - php-curl
+  - php-json
+  - php-mbstring
+  - php-mcrypt
+  - php-mysql
+  - php-xml
+  # - php{{ yum_php_version }}-mysql
+  # - php{{ yum_php_version }}-curl
+  # - php{{ yum_php_version }}-cli
+  # - php{{ yum_php_version }}-common
+  # - php{{ yum_php_version }}-mbstring
+  # - php{{ yum_php_version }}-mcrypt
+  # - php{{ yum_php_version }}-xml
+
+
+# yum_php_version: '72-php'
 
 apt_php_packages:
   - php{{ apt_php_version }}
@@ -21,3 +32,4 @@ apt_php_packages:
   - php{{ apt_php_version }}-gd
 
 apt_php_version: "7.1"
+

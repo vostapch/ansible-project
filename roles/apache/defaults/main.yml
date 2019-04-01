@@ -6,6 +6,8 @@ default_soft_pkg_redhat:
   - firewalld
   - httpd
   - wget
+  # - mariadb-server
+  # - mariadb-client
 default_soft_pkg_debian:
   - mc
   - vim
@@ -13,4 +15,6 @@ default_soft_pkg_debian:
   - apache2
   - wget
   - curl
+  - mariaDB-server
+  - mariaDB-client
   

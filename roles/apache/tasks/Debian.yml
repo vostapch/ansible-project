@@ -3,15 +3,8 @@
    debug:
      var: ansible_os_family
 
- - name: 2.Upgrade and upgrade Debian packages
-   apt:
-     update_cache: yes
-#  update_chache: yes
-#  upgrade: dist
-#   upgrade: yes
-#    force: yes
-#    autoremove: yes
-# register: install_apache2
+# - name: 2.Upgrade and upgrade Debian packages
+#   apt: update_cache: yes
 
  - name: 3.Enabling ufw
    ufw:
@@ -33,7 +26,7 @@
    apt:
      name: "{{item}}"
      state: present
-     update_cache: yes
+#     update_cache: yes
    with_items:
      - "{{ default_soft_pkg_debian }}"
 

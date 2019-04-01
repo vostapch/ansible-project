@@ -8,3 +8,8 @@
   service: 
     name: apache2
     state: restarted
+
+- name: yum upgrade
+  yum:
+    name: '*'
+    state: latest

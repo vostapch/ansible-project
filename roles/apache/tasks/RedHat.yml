@@ -1,30 +1,27 @@
 ---
-
 - name: 1. disable selinux
   selinux:
     state: disabled
-
-- name: 2. upgrade OS
-  yum:
-    name: '*'
-    state: latest
-
+  notify: yum upgrade
 # vim, nano, mc, firewalld
-- name: 3. install default soft
+
+- name: 2. install default soft
   yum:
     name: "{{item}}"
     state: present
   with_items:
     -  "{{ default_soft_pkg_redhat }}"
   register: install_httpd
+  notify: yum upgrade
 
-- name: 4. Start apache WebServer
+
+- name: 3. Start apache WebServer
   service: 
     name: httpd
     state: started
     enabled: yes
 
-- name: 5. Install config file for example.com and restart httpd
+- name: 4. Install config file for example.com and restart httpd
   template:
     src: centos_vhost_conf.j2
     dest: /etc/httpd/conf.d/example.com.conf
@@ -33,7 +30,8 @@
     mode: 0644
   notify: restart httpd  
 #  when: install_httpd.changed
-- name: 6. Creating directory for example.com
+
+- name: 5. Creating directory for example.com
   file: 
     path: /var/www/html/example.com
     state: directory
@@ -41,7 +39,7 @@
     group: apache
     mode: 0775
 
-- name: 10.Downloading WPress and unachive
+- name: 6.Downloading WPress and unachive
   unarchive:
     src: https://wordpress.org/latest.tar.gz 
     dest: /var/www/html/example.com
@@ -52,5 +50,11 @@
     mode: 0775
   notify: restart httpd
 
-- name: 11.Copy file
-  shell: echo "<?php phpinfo (); ?>" > /var/www/html/example.com/info.php
+- name: 7.Giving rights to the info.php  
+  template:
+    src: php_info.j2
+    dest: /var/www/html/example.com/info.php
+    owner: apache
+    group: apache
+    mode: 0775
+  notify: restart httpd
