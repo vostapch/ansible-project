@@ -13,3 +13,7 @@
   yum:
     name: '*'
     state: latest
+
+- name: apt upgrade
+  apt: 
+    update_cache: yes

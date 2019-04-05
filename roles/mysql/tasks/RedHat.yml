@@ -1,22 +1,21 @@
 ---
-- name: 1.Adding epel-release repository to Centos 7
+- name: Add repository
   yum_repository:
-    name: epel-release
-    state: present
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
 
-# - name: Add repository
-#   yum_repository:
-#     name: epel
-#     description: EPEL YUM repo
-#     baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+- name: Install the Python MySQL Support Libraries
+  yum:
+    pkg: MySQL-python
+    state: latest
 
-- name: 2.Adding mariadb_repo repository
-  yum_repository:
-    name: mariadb
-    file: mariadb
-    baseurl: http://yum.mariadb.org/{{mariadb_versions}}/centos7-amd64
-    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-    gpgcheck: yes
+- name: Adding mariadb_repo
+  template:
+    src: MariaDB.repo.j2
+    dest: /etc/yum.repos.d/MariaDB.repo
+    mode: 0644
+  notify: yum upgrade
 
 - name: 3.Installing MariaDB 
   yum:
@@ -27,12 +26,39 @@
 
 # tasks file for mysql
 
-- name: 4.Creating mysql database
-   mysql_db: name={{ mysql_db }} 
-   state: present
+- name: Start service mariadb, if not started
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
 
--  name: 5.Creating mysql user
-   mysql_user: 
-    name: {{ mysql_user }} 
-    password: {{ mysql_password }} 
-    priv: *.*:ALL
+- name: 4.Creating mysql database
+  mysql_db: 
+    name: "{{ mysql_db }}" 
+    state: present
+
+- name: 5.Creating mysql user
+  mysql_user: 
+    name: "{{ mysql_user}}" 
+    password: "{{ mysql_root_password}}" 
+    priv: '*.*:ALL,GRANT'
+    host: 'localhost'
+    state: present
+
+- name: Create `/root/.my.cnf`  with root password credentials
+  template:
+    src:  my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart mariadb
+
+- name: Create wp-config  with root password credentials
+  template:
+    src:  wp_config.j2
+    dest: /var/www/html/example.com/wp-config.php
+    owner: apache
+    group: apache
+    mode: 0775
+  notify: restart httpd

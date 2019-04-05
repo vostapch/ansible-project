@@ -1,19 +1,25 @@
 ---
 mysql_port: 3306
 mysql_root_user: root
-mysql_root_password: wordp
+mysql_root_password: passwd
 
-mysql_db: wordp
-mysql_user: wordp
+mysql_db: wjunk
+mysql_user: wjunk
+
+mariadb_service: mariadb
 
 # defaults file for mysql
 mariadb_versions:
-  - 10.2
+  - 10.4
 
 mariadb_redhat:
-  - mariadb-server
-  - mariadb-client
+  - MariaDB-server
+  - MariaDB-client
+  # - mysql-devel
+  # - python-devel
+
 
 mariadb_debian:
   - mariadb-server
   - mariadb-client
+  - MySQL-python

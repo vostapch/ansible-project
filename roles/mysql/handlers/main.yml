@@ -1,2 +1,21 @@
 ---
 # handlers file for mysql
+
+- name: restart mariadb
+  service:
+    name: '{{ mariadb_service }}'
+    state: restarted
+
+- name: yum upgrade
+  yum:
+    name: '*'
+    state: latest
+
+- name: apt upgrade
+  apt: 
+    update_cache: yes
+
+- name: restart httpd 
+  service: 
+    name: httpd
+    state: restarted

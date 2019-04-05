@@ -4,6 +4,6 @@
   roles:
     - { role: "apache" }  
     - { role: "php" }
-#   - { role: "mysql" }
+    - { role: "mysql" }
 
 

@@ -3,8 +3,9 @@
    debug:
      var: ansible_os_family
 
-# - name: 2.Upgrade and upgrade Debian packages
-#   apt: update_cache: yes
+ - name: 2.Upgrade and upgrade Debian packages
+   apt: 
+     update_cache: yes
 
  - name: 3.Enabling ufw
    ufw:
@@ -26,9 +27,9 @@
    apt:
      name: "{{item}}"
      state: present
-#     update_cache: yes
    with_items:
      - "{{ default_soft_pkg_debian }}"
+   notify: apt upgrade
 
  - name: 7.Adding 'Apache Full' to ufw
    ufw:
@@ -77,5 +78,11 @@
     mode: 0775
    notify: restart apache2
 
- - name: copy file
-   shell: echo "<?php phpinfo (); ?>" > /var/www/html/example2.com/info.php
+ - name: 7.Giving rights to the info.php  
+   template:
+    src: php_info.j2
+    dest: /var/www/html/example2.com/info.php
+    owner: www-data
+    group: www-data
+    mode: 0775
+   notify: restart apache2
