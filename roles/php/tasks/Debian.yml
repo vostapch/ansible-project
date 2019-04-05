@@ -4,9 +4,6 @@
   apt:
     name: python-apt
 
-- name: 2.Remove old PHP7 ppa repository
-  apt_repository: repo='ppa:ondrej/php-7.2' state=absent
-
 - name: Add PHP7 ppa repository
   apt_repository: repo='ppa:ondrej/php'
 
@@ -16,12 +13,11 @@
   notify: apt upgrade
 
 - name: Install php packages
-  become: true
+  become: true 
   apt:
     name: "{{ item }}"
-  with_nested: "{{ apt_php_packages }}"
-  when: apt_php_packages is defined
-  notify: apt upgrade
+  with_items:
+    - "{{apt_php_packages}}"
   notify: restart apache2
 
 

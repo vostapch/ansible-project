@@ -11,25 +11,15 @@ yum_php_packages:
   - php-mcrypt
   - php-mysql
   - php-xml
-  # - php{{ yum_php_version }}-mysql
-  # - php{{ yum_php_version }}-curl
-  # - php{{ yum_php_version }}-cli
-  # - php{{ yum_php_version }}-common
-  # - php{{ yum_php_version }}-mbstring
-  # - php{{ yum_php_version }}-mcrypt
-  # - php{{ yum_php_version }}-xml
-
-
-# yum_php_version: '72-php'
 
 apt_php_packages:
-  - php{{ apt_php_version }}
-  - php{{ apt_php_version }}-cgi
-  - php{{ apt_php_version }}-cli
-  - php{{ apt_php_version }}-common
-  - php{{ apt_php_version }}-curl
-  - php{{ apt_php_version }}-fpm
-  - php{{ apt_php_version }}-gd
+  - php-common
+  - php-cli
+  - php-curl
+  - php-json
+  - php-mbstring
+  - php-mcrypt
+  - php-mysql
+  - php-xml
 
-apt_php_version: "7.2"
 
