@@ -1,0 +1,50 @@
+---
+
+- name: install mysql (test)
+  become: yes
+  hosts: ubuntu
+
+  tasks:
+  - name: Install Utility software
+    apt: 
+      name: "{{ item }}"
+      state: latest
+      update_cache: yes
+    with_items:
+      - software-properties-common
+      - python-mysqldb
+      - debconf-utils
+      - python-apt
+      - python-dev
+      - python-pip
+      - build-essential
+      - libmysqlclient-dev
+      - libdbd-mysql-perl
+  
+  - name: Add apt key
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: "0xF1656F24C74CD1D8"
+
+  - name: Add mariadb repository
+    apt_repository:
+      filename: MariaDB
+      repo: "{{ item }}"
+      state: present
+      update_cache: yes
+    with_items:
+      - 'deb [arch=amd64,arm64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu xenial main'
+      - 'deb-src http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu xenial main'
+  
+  - name: run script
+    script: /Users/volodymyrostapchuk/Documents/scripts/test_playbook/roles/mysql/files/setup_frontend.sh
+  
+  - name: install mysql
+    apt:
+      pkg: "{{item}}"
+      state: latest
+    environment:
+      DEBIAN_FRONTEND: noninteractive
+    with_items:
+      - mariadb-server
+      - mariadb-client

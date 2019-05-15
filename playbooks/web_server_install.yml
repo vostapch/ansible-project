@@ -2,8 +2,8 @@
 - hosts: ubuntu
   become: yes
   roles:
-    - { role: "apache" }  
-    - { role: "php" }
-    # - { role: "mysql" }
+    # - { role: "apache" }  
+    # - { role: "php" }
+    - { role: "mysql" }
 
 

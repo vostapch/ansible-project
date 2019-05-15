@@ -2,6 +2,7 @@
 mysql_port: 3306
 mysql_root_user: root
 mysql_root_password: passwd
+mysql_root_password_again: passwd
 
 mysql_db: wjunk
 mysql_user: wjunk
@@ -15,11 +16,12 @@ mariadb_versions:
 mariadb_redhat:
   - MariaDB-server
   - MariaDB-client
-  # - mysql-devel
-  # - python-devel
-
 
 mariadb_debian:
   - mariadb-server
   - mariadb-client
-  - MySQL-python
+  # - mariadb-common
+
+mariadb_repo:
+  - deb [arch=amd64,arm64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu xenial main
+  - deb-src http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu xenial main
